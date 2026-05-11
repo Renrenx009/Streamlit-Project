@@ -15,21 +15,6 @@ import json
 import os
 import sys
 import shutil
-import subprocess
-import time
-
-# 🚀 Cloud Ollama Startup (Runs only on first load)
-if not os.environ.get("OLLAMA_SERVER_RUNNING"):
-    st.sidebar.info("⏳ Starting Ollama server & downloading model... (1-2 min)")
-    # Install Ollama if missing
-    subprocess.run("curl -fsSL https://ollama.com/install.sh | sh", shell=True, check=True)
-    # Start server in background
-    subprocess.Popen(["ollama", "serve"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    os.environ["OLLAMA_SERVER_RUNNING"] = "1"
-    # Wait for server to be ready
-    time.sleep(5)
-    # Pull model (cached in Cloud for ~24h)
-    subprocess.run(["ollama", "pull", "llama3.2"], check=True)
 
 # Set ffmpeg path before importing whisper/pyannote
 if sys.platform == "win32":
