@@ -22,7 +22,7 @@ import time
 if not os.environ.get("OLLAMA_SERVER_RUNNING"):
     st.sidebar.info("⏳ Starting Ollama server & downloading model... (1-2 min)")
     # Install Ollama if missing
-    subprocess.run(["curl", "-fsSL", "https://ollama.com/install.sh", "|", "sh"], shell=True, check=True)
+    subprocess.run("curl -fsSL https://ollama.com/install.sh | sh", shell=True, check=True)
     # Start server in background
     subprocess.Popen(["ollama", "serve"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     os.environ["OLLAMA_SERVER_RUNNING"] = "1"
