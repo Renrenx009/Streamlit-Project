@@ -17,7 +17,6 @@ import sys
 import shutil
 import subprocess
 import time
-import os
 
 # 🚀 Cloud Ollama Startup (Runs only on first load)
 if not os.environ.get("OLLAMA_SERVER_RUNNING"):
