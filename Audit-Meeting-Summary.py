@@ -14,6 +14,7 @@ import io
 import json
 import os
 import sys
+import shutil
 
 # Set ffmpeg path before importing whisper/pyannote
 if sys.platform == "win32":
