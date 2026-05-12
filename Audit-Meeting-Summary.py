@@ -15,6 +15,7 @@ import json
 import os
 import sys
 import shutil
+import re
 
 # Set ffmpeg path before importing whisper/pyannote
 if sys.platform == "win32":
@@ -176,22 +177,28 @@ def generate_docx(data):
     return buffer
 
 
+def clean_for_pdf(text):
+    """Removes emojis & non-ASCII characters that break fpdf"""
+    if not text: return ""
+    return re.sub(r'[^\x00-\x7F]+', '', str(text))
+
+
 def generate_pdf(data):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Helvetica", size=12)
-    pdf.multi_cell(0, 8, f"Audio Analysis Report - {data['filename']}")
+    pdf.multi_cell(0, 8, clean_for_pdf(f"Audio Analysis Report - {data['filename']}"))
     pdf.ln(5)
     pdf.set_font("Helvetica", size=10)
-    pdf.multi_cell(0, 5, f"Processed: {data['timestamp']}")
+    pdf.multi_cell(0, 5, clean_for_pdf(f"Processed: {data['timestamp']}"))
     pdf.ln(5)
 
     for title, content in [("Transcript", data["transcript"]), ("Summary", data["summary"]),
                            ("Keywords", data["keywords"]), ("Sentiment", data["sentiment"])]:
         pdf.set_font("Helvetica", style="B", size=11)
-        pdf.cell(0, 6, title, new_x="LMARGIN", new_y="NEXT")
+        pdf.cell(0, 6, clean_for_pdf(title), new_x="LMARGIN", new_y="NEXT")
         pdf.set_font("Helvetica", size=10)
-        pdf.multi_cell(0, 5, content)
+        pdf.multi_cell(0, 5, clean_for_pdf(content))
         pdf.ln(3)
 
     buffer = io.BytesIO()
